@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-white fixed-top">
+<nav class="bg-white navbar navbar-expand-lg fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="https://wsneofeeder.iluniveral.id/">
             <img src="image/bph-univeral.png" alt="Bootstrap" width="230" height="50">
@@ -8,9 +8,9 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="mb-2 navbar-nav me-auto mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/mhs">Jumlah Mahasiswa</a>
+                    <a class="nav-link active" aria-current="page" href="/mahasiswa">Jumlah Mahasiswa</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="#">Grafik PDDIKTI</a>
@@ -39,7 +39,9 @@
                 </li>
             </ul>
             <div class="d-flex">
-                <button type="button" class="btn btn-primer" data-toggle="modal" id="openBtn">Login</button>
+                <a href="/login">
+                    <button type="button" class="btn btn-primer">Login</button>
+                </a>
             </div>
         </div>
     </div>
@@ -50,7 +52,7 @@
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form method="POST" action="/login">
-            <div class="modal-content text-black">
+            <div class="text-black modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="myModalTitle">Login Admin</h5>
                 </div>
