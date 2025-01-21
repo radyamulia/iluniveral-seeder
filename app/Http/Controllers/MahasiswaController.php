@@ -44,32 +44,32 @@ class MahasiswaController extends Controller
     // Get a list of prodi with its total mahasiswa
     public function getTotalMahasiswaForEachProdi(Request $request)
     {
-        $get_token = $this->token->getToken();
-        $prodi_list = $this->prodi->getAllProdi($get_token);
+        $prodi_list = Prodi::all();
         $tahun = $request->tahun;
         $hasil = [];
         $total = 0;
 
         foreach ($prodi_list as $prodi) {
-            // Set the filter based on condition
             if ($prodi['id_prodi'] == '343a3445-fc49-4bd2-9c53-9c514bafaf2e' && $tahun < 23) {
-                $filter = "id_prodi = '" . $prodi['id_prodi'] . "' AND nim LIKE 'MU" . $tahun . "%'";
+                $nimPattern = 'MU' . $tahun . '%';
             } else {
-                $filter = "id_prodi = '" . $prodi['id_prodi'] . "' AND nim LIKE '" . $tahun . "%'";
+                $nimPattern = $tahun . '%';
             }
 
             // Get the students matching the filter
-            $banyakMhs = $this->mahasiswa->getAllMhs($get_token, $filter);
+            $list_mhs = Mahasiswa::where('id_prodi', $prodi['id_prodi'])
+                ->where('nim', 'like', $nimPattern)
+                ->get();
 
             // Add the result to the $hasil array
             $hasil[] = [
                 "program_studi" => $prodi['nama_program_studi'],
-                "jenjang" => $prodi['nama_jenjang_pendidikan'],
-                "jumlah" => count($banyakMhs),
+                "jenjang" => $prodi['jenjang_pendidikan']['nama_jenjang_didik'],
+                "jumlah" => count($list_mhs),
             ];
 
             // Add the count to the total
-            $total += count($banyakMhs);
+            $total += count($list_mhs);
         }
 
         return view('components.mahasiswa_table', compact('hasil', 'total'));

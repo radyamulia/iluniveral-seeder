@@ -10,6 +10,17 @@
             {{-- Modal Trigger Button --}}
             <x-modal-prodi name="prodi-modal" />
 
+            {{-- Search Bar --}}
+            <form method="GET" action="{{ route('admin.prodi') }}" class="mb-6">
+                <div class="flex items-center">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari mahasiswa..."
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <button type="submit" class="px-4 py-2 ml-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600">
+                        Cari
+                    </button>
+                </div>
+            </form>
+
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 {{-- Data Table --}}
                 <div class="p-6 space-y-8 overflow-scroll text-gray-900 scrollbar-hide">

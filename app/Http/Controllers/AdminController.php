@@ -28,9 +28,15 @@ class AdminController extends Controller
     }
 
     // ---------------- Mahasiswa -------------- 
-    public function getAllMahasiswaFromDB()
+    public function getAllMahasiswaFromDB(Request $request)
     {
-        $list_mahasiswa = Mahasiswa::paginate(25);
+        $search = $request->input('search');
+
+        // Query with optional search filtering
+        $list_mahasiswa = Mahasiswa::when($search, function ($query, $search) {
+            return $query->where('nama_mahasiswa', 'like', '%' . $search . '%')
+                ->orWhere('nim', 'like', '%' . $search . '%');
+        })->paginate(25);
 
         return view('admin.mahasiswa', compact('list_mahasiswa'));
     }
@@ -93,9 +99,16 @@ class AdminController extends Controller
 
 
     // ---------- Program Studi ----------------
-    public function getAllProdiFromDB()
+    public function getAllProdiFromDB(Request $request)
     {
-        $list_prodi = Prodi::with('jenjang_pendidikan')->paginate(15);
+        $search = $request->input('search');
+
+        // Query with optional search filtering
+        $list_prodi = Prodi::when($search, function ($query, $search) {
+            return $query->where('nama_program_studi', 'like', '%' . $search . '%');
+        })->paginate(20);
+
+        // $list_prodi = Prodi::with('jenjang_pendidikan')->paginate(15);
         return view('admin.prodi', compact('list_prodi'));
     }
 
@@ -126,10 +139,16 @@ class AdminController extends Controller
     }
 
     // ------- Jenjang Pendidikan -------------
-    public function getAllJenjangFromDB()
+    public function getAllJenjangFromDB(Request $request)
     {
-        $list_jenjang = Jenjang::paginate(15);
+        $search = $request->input('search');
 
+        // Query with optional search filtering
+        $list_jenjang = Jenjang::when($search, function ($query, $search) {
+            return $query->where('nama_jenjang_didik', 'like', '%' . $search . '%');
+        })->paginate(20);
+
+        // $list_jenjang = Jenjang::paginate(15);
         return view('admin.jenjang', compact('list_jenjang'));
     }
 
