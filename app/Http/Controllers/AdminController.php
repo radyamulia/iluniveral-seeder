@@ -34,8 +34,15 @@ class AdminController extends Controller
 
         // Query with optional search filtering
         $list_mahasiswa = Mahasiswa::when($search, function ($query, $search) {
-            return $query->where('nama_mahasiswa', 'like', '%' . $search . '%')
-                ->orWhere('nim', 'like', '%' . $search . '%');
+            $query->where('nama_mahasiswa', 'like', '%' . $search . '%')
+                ->orWhere('nim', 'like', '%' . $search . '%')
+                ->orWhereHas('prodi', function ($query) use ($search) {
+                    $query->where('nama_program_studi', 'like', '%' . $search . '%')
+                        ->orWhere('kode_program_studi', 'like', '%' . $search . '%')
+                        ->orWhereHas('jenjang_pendidikan', function ($query) use ($search) {
+                            $query->where('nama_jenjang_didik', 'like', '%' . $search . '%');
+                        });
+                });
         })->paginate(25);
 
         return view('admin.mahasiswa', compact('list_mahasiswa'));
