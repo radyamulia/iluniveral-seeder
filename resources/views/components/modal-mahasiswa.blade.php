@@ -87,7 +87,7 @@
         <form method="GET" action="{{ route('admin.mahasiswa.export-current') }}">
             @csrf
             @method('GET')
-            <button type="submit" class="px-4 py-2 text-white bg-orange-500 rounded hover:bg-orange-600">
+            <button type="submit" class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">
                 Export Excel
             </button>
         </form>
