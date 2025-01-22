@@ -84,10 +84,10 @@
 }" class="relative">
     <!-- Trigger Button -->
     <div class="flex justify-end w-full gap-2">
-        <form method="GET" action="{{ route('admin.mahasiswa.export-current') }}">
+        <form method="GET" action="{{ route('admin.mahasiswa.export-current') }}" class="text-white bg-green-500 rounded hover:bg-green-600">
             @csrf
             @method('GET')
-            <button type="submit" class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">
+            <button type="submit" class="px-4 py-2">
                 Export Excel
             </button>
         </form>
