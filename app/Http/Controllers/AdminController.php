@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\JenjangExport;
+use App\Exports\MahasiswaExport;
+use App\Exports\ProdiExport;
 use App\Models\Jenjang;
 use App\Models\Mahasiswa;
 use App\Models\Prodi;
@@ -9,11 +12,11 @@ use App\Models\Token;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
 {
     private $token;
-    private $get_token;
     private $prodi;
     private $jenjang;
     private $mahasiswa;
@@ -21,7 +24,6 @@ class AdminController extends Controller
     public function __construct()
     {
         $this->token = new Token();
-        $this->get_token = $this->token->getToken();
         $this->prodi = new Prodi();
         $this->jenjang = new Jenjang();
         $this->mahasiswa = new Mahasiswa();
@@ -104,6 +106,32 @@ class AdminController extends Controller
         return response()->json(['message' => 'Data synchronized successfully.'], 200);
     }
 
+    public function exportCurrentMahasiswaToExcel(Request $request)
+    {
+        // Extract search filters and pagination from the request
+        $search = $request->get('search', null);
+        $page = $request->get('page', 1);
+
+        // Rebuild the paginated query
+        $list_mahasiswa = Mahasiswa::when($search, function ($query, $search) {
+            $query->where('nama_mahasiswa', 'like', '%' . $search . '%')
+                ->orWhere('nim', 'like', '%' . $search . '%')
+                ->orWhereHas('prodi', function ($query) use ($search) {
+                    $query->where('nama_program_studi', 'like', '%' . $search . '%')
+                        ->orWhere('kode_program_studi', 'like', '%' . $search . '%')
+                        ->orWhereHas('jenjang_pendidikan', function ($query) use ($search) {
+                            $query->where('nama_jenjang_didik', 'like', '%' . $search . '%');
+                        });
+                });
+        })->paginate(50, ['*'], 'page', $page);
+
+        // Get the items for the current page
+        $currentPageData = $list_mahasiswa->items();
+
+        // Export the current page's data
+        return Excel::download(new MahasiswaExport(collect($currentPageData)), 'mahasiswa_export.xlsx');
+    }
+
 
     // ---------- Program Studi ----------------
     public function getAllProdiFromDB(Request $request)
@@ -115,13 +143,14 @@ class AdminController extends Controller
             return $query->where('nama_program_studi', 'like', '%' . $search . '%');
         })->paginate(20);
 
-        // $list_prodi = Prodi::with('jenjang_pendidikan')->paginate(15);
         return view('admin.prodi', compact('list_prodi'));
     }
 
     public function getAllProdi()
     {
-        $list_prodi = $this->prodi->getAllProdi($this->token->getToken());
+        $list_prodi = Cache::remember('prodi_all_data', now()->addMinutes(10), function () {
+            return $this->prodi->getAllProdi($this->token->getToken());
+        });
         return $list_prodi;
     }
 
@@ -145,6 +174,25 @@ class AdminController extends Controller
         return response()->json(['message' => 'Data synchronized successfully.'], 200);
     }
 
+    public function exportCurrentProdiToExcel(Request $request)
+    {
+        // Extract search filters and pagination from the request
+        $search = $request->get('search', null);
+        $page = $request->get('page', 1);
+
+        // Rebuild the paginated query
+        $list_prodi = Prodi::when($search, function ($query, $search) {
+            $query->where('nama_program_studi', 'like', '%' . $search . '%');
+        })->paginate(25, ['*'], 'page', $page);
+
+        // Get the items for the current page
+        $currentPageData = $list_prodi->items();
+
+        // Export the current page's data
+        return Excel::download(new ProdiExport(collect($currentPageData)), 'program_studi_export.xlsx');
+    }
+
+
     // ------- Jenjang Pendidikan -------------
     public function getAllJenjangFromDB(Request $request)
     {
@@ -161,7 +209,9 @@ class AdminController extends Controller
 
     public function getAllJenjang()
     {
-        $list_jenjang = $this->jenjang->getAllJenjang($this->token->getToken());
+        $list_jenjang = Cache::remember('jenjang_all_data', now()->addMinutes(10), function () {
+            return $this->jenjang->getAllJenjang($this->token->getToken());
+        });
         return $list_jenjang;
     }
 
@@ -179,5 +229,24 @@ class AdminController extends Controller
         }
 
         return response()->json(['message' => 'Data synchronized successfully.'], 200);
+    }
+
+    public function exportCurrentJenjangToExcel(Request $request)
+    {
+        // Extract search filters and pagination from the request
+        $search = $request->get('search', null);
+        $page = $request->get('page', 1);
+
+        // Rebuild the paginated query
+        $list_jenjang = Jenjang::when($search, function ($query, $search) {
+            $query->where('nama_jenjang_didik', 'like', '%' . $search . '%')
+                ->orWhere('id_jenjang_didik', 'like', '%' . $search . '%');
+        })->paginate(25, ['*'], 'page', $page);
+
+        // Get the items for the current page
+        $currentPageData = $list_jenjang->items();
+
+        // Export the current page's data
+        return Excel::download(new JenjangExport(collect($currentPageData)), 'jenjang_pendidikan_export.xlsx');
     }
 }

@@ -35,9 +35,16 @@
                         <li>Kemudian akan muncul pop-up, yang menampilkan data yang ditarik dari PDDikti.</li>
                         <li>Untuk melakukan update data pada database, scroll ke bawah dan tekan tombol <span
                                 class="p-1 text-white bg-blue-500 rounded">Sinkronkan</span>.</li>
-                        <li>Untuk menutup pop-up, tekan <span
-                                class="p-1 text-white bg-red-500 rounded">Batal</span>.</li>
+                        <li>Untuk menutup pop-up, tekan <span class="p-1 text-white bg-red-500 rounded">Batal</span>.
+                        </li>
                     </ol>
+                </div>
+                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900 [&>code]:p-1 [&>code]:bg-slate-200 [&>code]:rounded">
+                        Beberapa page menampilkan <strong>tabel yang terpotong</strong>, untuk melihat data lakukan
+                        <code>scroll</code> secara horizontal. Atau jika menggunakan <i>mouse</i>, tekan
+                        <code>shift</code> + <code>scroll ke bawah</code>
+                    </div>
                 </div>
             </div>
         </div>

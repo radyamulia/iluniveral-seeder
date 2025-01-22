@@ -86,7 +86,12 @@
     }
 }" class="relative">
     <!-- Trigger Button -->
-    <div class="flex justify-end w-full">
+    <div class="flex justify-end w-full gap-2">
+        <form method="GET" action="{{ route('admin.prodi.export-current') }}">
+            <button type="submit" class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">
+                Export Excel
+            </button>
+        </form>
         <button type="button" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600" x-on:click="fetchData()">
             Sinkronkan Data
         </button>

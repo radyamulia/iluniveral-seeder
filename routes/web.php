@@ -25,12 +25,15 @@ Route::middleware('auth')->controller(AdminController::class)->group(function ()
 
         // ------- Mahasiswa ---------
         Route::get('/mahasiswa', 'getAllMahasiswaFromDB')->name('admin.mahasiswa');
+        Route::get('/mahasiswa/export-current', 'exportCurrentMahasiswaToExcel')->name('admin.mahasiswa.export-current');
 
         // --------- Prodi ------------
         Route::get('/prodi', 'getAllProdiFromDB')->name('admin.prodi');
+        Route::get('/prodi/export-current', 'exportCurrentProdiToExcel')->name('admin.prodi.export-current');
 
         // -------- Jenjang ------------
         Route::get('/jenjang-didik', 'getAllJenjangFromDB')->name('admin.jenjang');
+        Route::get('/jenjang-didik/export-current', 'exportCurrentJenjangToExcel')->name('admin.jenjang.export-current');
 
 
         // ______ Online Seeder ________

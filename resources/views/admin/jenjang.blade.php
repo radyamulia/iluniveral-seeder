@@ -42,12 +42,12 @@
                         </table>
                     @else
                         <div class="text-center text-gray-600">
-                            {{ __('Data jenjang pendidikan belum tersedia.') }}
+                            {{ __('Data jenjang pendidikan tidak tersedia.') }}
                         </div>
                     @endif
 
                     {{-- Pagination --}}
-                    {{ $list_jenjang }}
+                    {{ $list_jenjang->appends(request()->query())->links() }}
                 </div>
             </div>
         </div>

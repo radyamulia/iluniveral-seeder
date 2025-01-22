@@ -64,12 +64,12 @@
                         </table>
                     @else
                         <div class="text-center text-gray-600">
-                            {{ __('Data mahasiswa belum tersedia.') }}
+                            {{ __('Data mahasiswa tidak tersedia.') }}
                         </div>
                     @endif
 
                     {{-- Pagination --}}
-                    {{ $list_mahasiswa }}
+                    {{ $list_mahasiswa->appends(request()->query())->links() }}
                 </div>
             </div>
         </div>

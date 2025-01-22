@@ -46,12 +46,12 @@
                         </table>
                     @else
                         <div class="text-center text-gray-600">
-                            {{ __('Data prodi belum tersedia.') }}
+                            {{ __('Data prodi tidak tersedia.') }}
                         </div>
                     @endif
 
                     {{-- Pagination --}}
-                    {{ $list_prodi }}
+                    {{ $list_prodi->appends(request()->query())->links() }}
                 </div>
             </div>
         </div>
