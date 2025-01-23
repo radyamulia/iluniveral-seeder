@@ -23,7 +23,7 @@
 
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 {{-- Data Table --}}
-                <div class="p-6 space-y-8 overflow-scroll text-gray-900 scrollbar-hide">
+                <div class="p-6 space-y-8 overflow-scroll text-gray-900">
                     @if (count($list_prodi) > 0)
                         @php $no = 1; @endphp
                         <table class="w-full">

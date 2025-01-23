@@ -83,17 +83,65 @@
                     this.isStatusShown = false;
                 }, 2000)
             });
-    }
+    },
+        exportData() {
+        this.isLoading = true;
+
+        fetch('{{ route('admin.jenjang.export-current') }}', {
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                }
+                throw new Error('Export failed');
+            })
+            .then(blob => {
+                this.isLoading = false;
+
+                // Berhasil eksport
+                this.syncedStatus = 3; // Status 3 untuk Export Excel Berhasil
+                setTimeout(() => {
+                    this.isStatusShown = true;
+                }, 250);
+
+                setTimeout(() => {
+                    this.isStatusShown = false;
+                }, 2000);
+
+                // Buat download link
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'export_prodi.xlsx';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            })
+            .catch(err => {
+                console.error(err);
+                this.isLoading = false;
+
+                // Gagal eksport
+                this.syncedStatus = 4; // Status 4 untuk Export Excel Gagal
+                setTimeout(() => {
+                    this.isStatusShown = true;
+                }, 250);
+
+                setTimeout(() => {
+                    this.isStatusShown = false;
+                }, 2000);
+            });
+    },
 }" class="relative">
     <!-- Trigger Button -->
     <div class="flex justify-end w-full gap-2">
-        <form method="GET" action="{{ route('admin.jenjang.export-current') }}">
-            @csrf
-            @method('GET')
-            <button type="submit" class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">
-                Export Excel
-            </button>
-        </form>
+        <button type="button" class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600" x-on:click="exportData()">
+            Export Excel
+        </button>
         <button type="button" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600" x-on:click="fetchData()">
             Sinkronkan Data
         </button>
@@ -104,10 +152,12 @@
         <!-- Sync Messages -->
         <template
             x-for="(message, index) in [
-          { status: 0, text: 'Sinkronisasi Gagal!', color: 'bg-red-400' },
-          { status: 1, text: 'Sinkronisasi Berhasil!', color: 'bg-green-400' },
-          { status: 2, text: 'Gagal menampilkan data dari server.', color: 'bg-red-400' }
-      ]"
+        { status: 0, text: 'Sinkronisasi Gagal!', color: 'bg-red-400' },
+        { status: 1, text: 'Sinkronisasi Berhasil!', color: 'bg-green-400' },
+        { status: 2, text: 'Gagal menampilkan data dari server.', color: 'bg-red-400' },
+        { status: 3, text: 'Export Excel Berhasil!', color: 'bg-green-400' },
+        { status: 4, text: 'Export Excel Gagal!', color: 'bg-red-400' }
+    ]"
             :key="index">
             <p x-show="syncedStatus === message.status" x-transition:enter="transform transition ease-out duration-300"
                 x-transition:enter-start="translate-x-full opacity-0" x-transition:enter-end="translate-x-0 opacity-100"
@@ -128,7 +178,7 @@
     <!-- Modal -->
     <div x-show="showModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center size-screen">
         <div class="absolute bg-gray-800 bg-opacity-75 -z-10 size-full" x-on:click="showModal = false"></div>
-        <div class="w-full max-w-4xl p-6 overflow-scroll scrollbar-hide bg-white rounded-lg shadow-lg max-h-[90dvh]">
+        <div class="w-full max-w-4xl p-6 overflow-scroll bg-white rounded-lg shadow-lg max-h-[90dvh]">
             <!-- Modal Header -->
             <div class="flex justify-between mb-4">
                 <h2 class="text-lg font-medium text-gray-900">Program Studi Data (PDDikti)</h2>

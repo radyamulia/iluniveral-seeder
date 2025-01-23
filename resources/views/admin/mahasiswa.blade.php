@@ -23,7 +23,7 @@
 
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 {{-- Data Table --}}
-                <div class="p-6 space-y-8 overflow-scroll text-gray-900 scrollbar-hide">
+                <div class="p-6 space-y-8 overflow-scroll text-gray-900">
                     @if (count($list_mahasiswa) > 0)
                         @php $no = 1; @endphp
                         <table class="w-full">
@@ -54,7 +54,8 @@
                                     <td scope="col">{{ $data['nama_status_mahasiswa'] }}</td>
                                     <td scope="col">{{ $data['nama_periode_masuk'] }}</td>
                                     <td scope="col">{{ $data['prodi']['nama_program_studi'] }}</td>
-                                    <td scope="col">{{ $data['prodi']['jenjang_pendidikan']['nama_jenjang_didik'] }}</td>
+                                    <td scope="col">{{ $data['prodi']['jenjang_pendidikan']['nama_jenjang_didik'] }}
+                                    </td>
                                     <td scope="col">{{ $data['prodi']['kode_program_studi'] }}</td>
                                     <td scope="col">{{ $data['id_registrasi_mahasiswa'] }}</td>
                                     <td scope="col">{{ $data['id_mahasiswa'] }}</td>
@@ -67,8 +68,9 @@
                             {{ __('Data mahasiswa tidak tersedia.') }}
                         </div>
                     @endif
-
-                    {{-- Pagination --}}
+                </div>
+                {{-- Pagination --}}
+                <div class="px-8 py-4">
                     {{ $list_mahasiswa->appends(request()->query())->links() }}
                 </div>
             </div>
