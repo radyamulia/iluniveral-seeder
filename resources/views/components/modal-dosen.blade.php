@@ -1,7 +1,9 @@
-@props(['name' => 'jenjang-modal', 'maxWidth' => 'xl'])
+@props(['name' => 'dosen-modal', 'maxWidth' => 'xl'])
 
 <div x-data="{
-    data: [],
+    data: null,
+    currentPage: 1,
+    totalPages: 0,
     showModal: false,
     isLoading: false,
     isStatusShown: false,
@@ -13,18 +15,16 @@
     --}}
     syncedStatus: 0,
 
-    fetchData() {
+    fetchData(page = 1) {
+        this.showModal = false;
         this.isLoading = true;
-        if (this.data.length > 0) {
-            this.showModal = true;
-            this.isLoading = false;
-            return;
-        }
+        this.currentPage = page;
 
-        fetch('/admin/seeder/jenjang')
+        fetch(`/admin/seeder/dosen?page=${page}`)
             .then(res => res.json())
             .then(result => {
                 this.data = result;
+                this.totalPages = result.last_page;
                 this.showModal = true;
                 this.isLoading = false;
             })
@@ -45,15 +45,12 @@
         this.showModal = false;
         this.isLoading = true;
 
-        fetch('/admin/seeder/jenjang', {
+        fetch('/admin/seeder/dosen', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                body: JSON.stringify({
-                    cloud_data: this.data
-                })
             })
             .then(res => res.json())
             .then(result => {
@@ -84,10 +81,10 @@
                 }, 2000)
             });
     },
-        exportData() {
+    exportData() {
         this.isLoading = true;
 
-        fetch('{{ route('admin.jenjang.export-current') }}', {
+        fetch('{{ route('admin.dosen.export-current') }}', {
                 method: 'GET',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -116,7 +113,7 @@
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'export_jenjang.xlsx';
+                a.download = 'export_dosen.xlsx';
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
@@ -139,7 +136,8 @@
 }" class="relative">
     <!-- Trigger Button -->
     <div class="flex justify-end w-full gap-2">
-        <button type="button" class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600" x-on:click="exportData()">
+        <button type="button" class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
+            x-on:click="exportData()">
             Export Excel
         </button>
         <button type="button" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600" x-on:click="fetchData()">
@@ -188,31 +186,75 @@
             </div>
 
             <!-- Modal Content -->
-            <template x-if="data.length > 0">
+            <template x-if="data?.data && data?.data?.length > 0">
                 <table class="w-full border border-collapse border-gray-300">
                     <thead>
                         <tr class="bg-gray-200">
                             <th class="px-4 py-2 border border-gray-300">#</th>
-                            <th class="px-4 py-2 border border-gray-300">ID Jenjang Pendidikan</th>
-                            <th class="px-4 py-2 border border-gray-300">Nama Jenjang Pendidikan</th>
+                            <th class="px-4 py-2 border border-gray-300">Nama Dosen</th>
+                            <th class="px-4 py-2 border border-gray-300">NIDN</th>
+                            <th class="px-4 py-2 border border-gray-300">NIP</th>
+                            <th class="px-4 py-2 border border-gray-300">Jenis Kelamin</th>
+                            <th class="px-4 py-2 border border-gray-300">Agama</th>
+                            <th class="px-4 py-2 border border-gray-300">Tanggal Lahir</th>
+                            <th class="px-4 py-2 border border-gray-300">Status Aktif</th>
+                            <th class="px-4 py-2 border border-gray-300">ID Dosen</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <template x-for="(item, index) in data" :key="index">
+                        asogj
+                        <template x-for="(item, index) in data.data" :key="index">
                             <tr>
                                 <td class="px-4 py-2 border border-gray-300" x-text="index + 1"></td>
-                                <td class="px-4 py-2 border border-gray-300" x-text="item.id_jenjang_didik"></td>
-                                <td class="px-4 py-2 border border-gray-300" x-text="item.nama_jenjang_didik"></td>
+                                <td class="px-4 py-2 border border-gray-300" x-text="item.nama_dosen"></td>
+                                <td class="px-4 py-2 border border-gray-300" x-text="item.nidn"></td>
+                                <td class="px-4 py-2 border border-gray-300" x-text="item.nip"></td>
+                                <td class="px-4 py-2 border border-gray-300" x-text="item.jenis_kelamin"></td>
+                                <td class="px-4 py-2 border border-gray-300" x-text="item.nama_agama"></td>
+                                <td class="px-4 py-2 border border-gray-300" x-text="item.tanggal_lahir"></td>
+                                <td class="px-4 py-2 border border-gray-300" x-text="item.nama_status_aktif"></td>
+                                <td class="px-4 py-2 border border-gray-300" x-text="item.id_dosen"></td>
+                            </tr>
+                        </template>
+
+                        <template x-if="data?.data && data?.data.length === 0">
+                            <tr>
+                                <td colspan="9" class="px-4 py-2 text-center text-gray-500">
+                                    Data tidak ditemukan.
+                                </td>
                             </tr>
                         </template>
                     </tbody>
+
                 </table>
             </template>
 
-            <!-- Loading or No Data -->
-            <template x-if="data.length === 0">
-                <p class="text-gray-500">Data tidak ditemukan.</p>
-            </template>
+            {{-- Pagination --}}
+            <div class="flex justify-center gap-2 mt-4">
+                <button :disabled="currentPage === 1"
+                    class="px-4 py-2 text-white bg-blue-500 rounded disabled:opacity-50"
+                    x-on:click="fetchData(currentPage - 1)">
+                    Previous
+                </button>
+
+                <!-- Pagination buttons with max 6 visible pages -->
+                <template x-if="totalPages > 1">
+                    <template x-for="page in Array.from({ length: totalPages }, (_, i) => i + 1)"
+                        :key="page">
+                        <button :class="{ 'bg-blue-500': currentPage === page, 'bg-gray-300': currentPage !== page }"
+                            class="px-4 py-2 text-white rounded" x-on:click="fetchData(page)"
+                            x-show="page >= currentPage - 2 && page <= currentPage + 2">
+                            <span x-text="page"></span>
+                        </button>
+                    </template>
+                </template>
+
+                <button :disabled="currentPage === totalPages"
+                    class="px-4 py-2 text-white bg-blue-500 rounded disabled:opacity-50"
+                    x-on:click="fetchData(currentPage + 1)">
+                    Next
+                </button>
+            </div>
 
             {{-- Button Container --}}
             <div class="flex justify-end gap-4 mt-6">

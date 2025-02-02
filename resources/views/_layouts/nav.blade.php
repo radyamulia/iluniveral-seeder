@@ -35,7 +35,7 @@
                     </ul>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link active" href="https://univeral.ac.id/">Profil Universitas</a>
+                    <a class="nav-link active" target="_blank" href="https://univeral.ac.id/">Profil Universitas</a>
                 </li>
             </ul>
             <div class="d-flex">

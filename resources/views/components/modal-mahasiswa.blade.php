@@ -81,7 +81,7 @@
                 }, 2000)
             });
     },
-        exportData() {
+    exportData() {
         this.isLoading = true;
 
         fetch('{{ route('admin.mahasiswa.export-current') }}', {
@@ -113,7 +113,7 @@
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'export_prodi.xlsx';
+                a.download = 'export_mahasiswa.xlsx';
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
@@ -136,11 +136,11 @@
 }" class="relative">
     <!-- Trigger Button -->
     <div class="flex justify-end w-full gap-2">
-        <button type="button" class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600" x-on:click="exportData()">
+        <button type="button" class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
+            x-on:click="exportData()">
             Export Excel
         </button>
-        <button type="button" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-            x-on:click="fetchData()">
+        <button type="button" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600" x-on:click="fetchData()">
             Sinkronkan Data
         </button>
     </div>

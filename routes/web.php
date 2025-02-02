@@ -35,6 +35,14 @@ Route::middleware('auth')->controller(AdminController::class)->group(function ()
         Route::get('/jenjang-didik', 'getAllJenjangFromDB')->name('admin.jenjang');
         Route::get('/jenjang-didik/export-current', 'exportCurrentJenjangToExcel')->name('admin.jenjang.export-current');
 
+        // -------- Dosen ------------
+        Route::get('/dosen', 'getAllDosenFromDB')->name('admin.dosen');
+        Route::get('/dosen/export-current', 'exportCurrentDosenToExcel')->name('admin.dosen.export-current');
+
+        // -------- Mata Kuliah ------------
+        Route::get('/matakuliah', 'getAllMataKuliahFromDB')->name('admin.matakuliah');
+        Route::get('/matakuliah/export-current', 'exportCurrentMataKuliahToExcel')->name('admin.matakuliah.export-current');
+
 
         // ______ Online Seeder ________
         Route::prefix('/seeder')->group(function () {
@@ -47,6 +55,12 @@ Route::middleware('auth')->controller(AdminController::class)->group(function ()
             // Mahasiswa
             Route::get('/mahasiswa', 'getAllMahasiswa');
             Route::post('/mahasiswa', 'syncMahasiswa');
+            // Dosen
+            Route::get('/dosen', 'getAllDosen');
+            Route::post('/dosen', 'syncDosen');
+            // Dosen
+            Route::get('/matakuliah', 'getAllMataKuliah');
+            Route::post('/matakuliah', 'syncMataKuliah');
         });
     });
 

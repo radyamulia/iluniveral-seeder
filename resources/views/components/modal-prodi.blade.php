@@ -136,7 +136,6 @@
                 }, 2000);
             });
     },
-
 }" class="relative">
     <!-- Trigger Button -->
     <div class="flex justify-end w-full gap-2">
