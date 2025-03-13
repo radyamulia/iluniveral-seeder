@@ -1,6 +1,6 @@
 <nav class="bg-white navbar navbar-expand-lg fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="https://wsneofeeder.iluniveral.id/">
+        <a class="navbar-brand" href="https://bph.univeral.ac.id/">
             <img src="image/bph-univeral.png" alt="Bootstrap" width="230" height="50">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -16,7 +16,7 @@
                     <a class="nav-link active" href="#">Grafik PDDIKTI</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">IPEPA</a>
+                    <a class="nav-link active" href="/ipepa">IPEPA</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="#">Mahasiswa</a>

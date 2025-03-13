@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('id_jenjang_didik')->index();
             $table->foreign('id_jenjang_didik')->references('id_jenjang_didik')->on('jenjang_pendidikan')->cascadeOnDelete();
 
-            $table->string('id_matkul', 100);
+            $table->string('id_matkul', 100)->unique();
 
             $table->string('kode_mata_kuliah', 20);
             $table->string('nama_mata_kuliah', 200);

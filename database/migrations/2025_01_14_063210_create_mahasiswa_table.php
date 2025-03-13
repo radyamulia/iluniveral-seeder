@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('mahasiswa', function (Blueprint $table) {
             $table->id();
+            $table->string('id_mahasiswa', 100)->unique();
             $table->string('id_registrasi_mahasiswa', 100);
-            $table->string('id_mahasiswa', 100);
             $table->string('id_sms', 100);
             $table->string('nim', 24)->nullable();
             $table->string('nama_mahasiswa', 100);
@@ -23,6 +23,7 @@ return new class extends Migration
             $table->double('ipk')->nullable();
             $table->string('nama_agama')->nullable();
             $table->string('nama_status_mahasiswa', 50)->nullable();
+            $table->string('id_periode', 5)->nullable();
             $table->string('nama_periode_masuk', 50)->nullable();
             // foreign key to id_prodi (uuid)
             $table->string('id_prodi', 100)->index();

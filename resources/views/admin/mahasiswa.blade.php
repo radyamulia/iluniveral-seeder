@@ -35,6 +35,7 @@
                                 <th scope="col">IPK</th>
                                 <th scope="col">Agama</th>
                                 <th scope="col">Status Mahasiswa</th>
+                                <th scope="col">ID Periode</th>
                                 <th scope="col">Periode Masuk</th>
                                 <th scope="col">Prodi</th>
                                 <th scope="col">Jenjang Pendidikan</th>
@@ -52,6 +53,7 @@
                                     <td scope="col">{{ $data['ipk'] }}</td>
                                     <td scope="col">{{ $data['nama_agama'] }}</td>
                                     <td scope="col">{{ $data['nama_status_mahasiswa'] }}</td>
+                                    <td scope="col">{{ $data['id_periode'] }}</td>
                                     <td scope="col">{{ $data['nama_periode_masuk'] }}</td>
                                     <td scope="col">{{ $data['prodi']['nama_program_studi'] }}</td>
                                     <td scope="col">{{ $data['prodi']['jenjang_pendidikan']['nama_jenjang_didik'] }}

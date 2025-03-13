@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\GuestController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -9,10 +10,14 @@ Route::get('/', function () {
     return view('dashboard');
 });
 
-Route::get('/mahasiswa', [MahasiswaController::class, 'index']);
+Route::controller(GuestController::class)->group(function () {
+    Route::get('/mahasiswa', [GuestController::class, 'getTotalMahasiswaDataFilter']);
+    Route::post('/mahasiswa', [GuestController::class, 'getTotalMahasiswaForEachProdi']);
+    Route::get('/ipepa', [GuestController::class, 'getIPEPA']);
+
+});
 
 // EXTERNAL REQUEST ROUTES
-Route::post('/mahasiswa', [MahasiswaController::class, 'getTotalMahasiswaForEachProdi']);
 
 // ADMIN ROUTES
 Route::get('/admin/dashboard', function () {
@@ -43,6 +48,13 @@ Route::middleware('auth')->controller(AdminController::class)->group(function ()
         Route::get('/matakuliah', 'getAllMataKuliahFromDB')->name('admin.matakuliah');
         Route::get('/matakuliah/export-current', 'exportCurrentMataKuliahToExcel')->name('admin.matakuliah.export-current');
 
+        // -------- IPEPA ------------
+        Route::get('/ipepa', 'getIPEPA')->name('admin.ipepa');
+        Route::get('/ipepa/mhs/{category}/{id_periode}', 'getIPEPADetailsMhs')->name('admin.ipepa.details');
+        Route::get('/ipepa/dosen-tetap/{id_dosen}', 'getIPEPADetailsDosenTetap')->name('admin.ipepa.details');
+
+        // Route::get('/test', 'getTest')->name('admin.test');
+
 
         // ______ Online Seeder ________
         Route::prefix('/seeder')->group(function () {
@@ -58,9 +70,12 @@ Route::middleware('auth')->controller(AdminController::class)->group(function ()
             // Dosen
             Route::get('/dosen', 'getAllDosen');
             Route::post('/dosen', 'syncDosen');
-            // Dosen
+            // Mata Kuliah
             Route::get('/matakuliah', 'getAllMataKuliah');
             Route::post('/matakuliah', 'syncMataKuliah');
+            // IPEPA
+            Route::post('/ipepa/mahasiswa', 'syncIPEPAMhs');
+            Route::post('/ipepa/dosen', 'syncIPEPADosen');
         });
     });
 

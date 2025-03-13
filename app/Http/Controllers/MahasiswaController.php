@@ -34,12 +34,6 @@ class MahasiswaController extends Controller
         return view('mahasiswa', compact('dataFilter'));
     }
 
-    public function store() {}
-
-    public function update() {}
-
-    public function edit() {}
-
     // API Request Methods
     // Get a list of prodi with its total mahasiswa
     public function getTotalMahasiswaForEachProdi(Request $request)
@@ -55,7 +49,6 @@ class MahasiswaController extends Controller
             } else {
                 $nimPattern = $tahun . '%';
             }
-
             // Get the students matching the filter
             $list_mhs = Mahasiswa::where('id_prodi', $prodi['id_prodi'])
                 ->where('nim', 'like', $nimPattern)

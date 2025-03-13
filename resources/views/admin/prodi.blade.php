@@ -25,7 +25,6 @@
                 {{-- Data Table --}}
                 <div class="p-6 space-y-8 overflow-scroll text-gray-900">
                     @if (count($list_prodi) > 0)
-                        @php $no = 1; @endphp
                         <table class="w-full">
                             <tr class="[&>th]:text-center [&>th]:border [&>th]:p-2">
                                 <th scope="col">ID</th>

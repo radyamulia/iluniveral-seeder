@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Http;
 
 if (!function_exists('fetchData')) {
     function fetchData($act, $token, $filter = '', $order = '', $limit = '', $offset = '')
-    {
+    {   
+        // dd($filter);
+
         // $request_uri = env('REQUEST_URI');
         $request_uri = "http://157.119.222.108:8100/ws/live2.php";
 
@@ -23,10 +25,10 @@ if (!function_exists('fetchData')) {
             if ($response->successful()) {
                 $result = $response->json();
 
-                if (isset($result['data'])) {
+                if ($result['error_desc'] == null) {
                     return $result['data'];
                 } else {
-                    throw new \Exception("Data not found: " . ($result['error_code'] ?? 'Unknown error'));
+                    throw new \Exception("Data not found (" . $result['error_code'] . "): " . ($result['error_desc'] ?? 'Unknown error'));
                 }
             } else {
                 throw new \Exception("HTTP Request failed with status: " . $response->status());
